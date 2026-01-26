@@ -81,8 +81,8 @@ p {
   top: 0;
   left: 0;
   width: 100%;
-  background: rgba(249, 247, 244, 0.95); /* svetla poluprovidna pozadina */
-  backdrop-filter: blur(8px); /* blur za lep efekat */
+  background: rgba(249, 247, 244, 0.95);
+  backdrop-filter: blur(8px);
   z-index: 1000;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -110,7 +110,6 @@ p {
   color: var(--primary);
 }
 
-/* HERO */
 .hero {
   height: 100vh;
   background:
@@ -157,7 +156,7 @@ p {
   font-style: normal;
   font-size: 36px;
   letter-spacing: 1px;
-  transition: all 0.3s ease; /* glatka promena broja */
+  transition: all 0.3s ease;
 }
 
 .cd-label {
@@ -169,8 +168,6 @@ p {
   text-transform: uppercase;
   opacity: 0.85;
 }
-
-/* INFO GRID */
 .info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 2fr));
@@ -230,9 +227,9 @@ textarea {
 
 input::placeholder,
 textarea::placeholder {
-  color: var(--dark); /* boja placeholder-a */
-  opacity: 1; /* da boja bude jača, po defaultu neki browseri smanjuju opacity */
-  font-style: italic; /* opciono: italic placeholder */
+  color: var(--dark);
+  opacity: 1;
+  font-style: italic;
 }
 
 button {
@@ -258,8 +255,8 @@ footer {
   width: 100%;
   height: 360px;
   border: 0;
-  border-radius: 14px; /* okrugli uglovi */
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12); /* blaga senka */
+  border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
   margin-top: 20px;
 }
 
@@ -310,14 +307,14 @@ footer {
   align-items: center;
   justify-content: center;
   opacity: 1;
-  pointer-events: none; /* ne blokira klik kada nije prikazano */
+  pointer-events: none;
   transition: opacity 0.3s ease;
   z-index: 10;
 }
 
 .map-container:hover .gesture-overlay {
   opacity: 1;
-  pointer-events: auto; /* klik sada radi */
+  pointer-events: auto;
 }
 
 .gesture-overlay a {
@@ -378,9 +375,8 @@ footer {
   cursor: pointer;
   color: #c2a15f;
 }
-/* Osnovno za modal */
 .rsvp-modal {
-  display: none; /* <- VAŽNO da budu sakriveni na početku */
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -415,23 +411,20 @@ footer {
   left: 0;
   width: 100vw;
   height: 100vh;
-  pointer-events: none; /* da ne blokira klikove */
+  pointer-events: none;
   overflow: hidden;
-  z-index: 9999; /* iznad svega */
+  z-index: 9999;
 }
-
-/* Pojedinačni konfeti */
 .confetti-piece {
   position: absolute;
   width: 10px;
   height: 10px;
-  background-color: red; /* boja će se override-ovati iz JS-a */
+  background-color: red;
   opacity: 0.9;
   transform: rotate(0deg);
   animation: fall linear forwards;
 }
 
-/* Animacija pada */
 @keyframes fall {
   0% {
     transform: translateY(-20px) rotate(0deg);
@@ -443,7 +436,6 @@ footer {
   }
 }
 
-/* Možeš dodati različite oblike */
 .confetti-piece.round {
   border-radius: 50%;
 }

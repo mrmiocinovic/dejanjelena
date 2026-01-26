@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
     else if (attendanceRaw.includes("ne")) attendance = "ne";
 
     const data = {
-      name: form.querySelector("input[type='text']").value,
+      name: document.getElementById("rsvp-name").value,
       attendance,
       guests: guestsInput.value,
       message: form.querySelector("textarea").value,

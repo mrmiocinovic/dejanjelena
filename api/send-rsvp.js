@@ -48,13 +48,11 @@ export default async function handler(req, res) {
   if (guests && guests > 10)
     return res.status(400).json({ error: "Previše gostiju" });
 
-  const row = [
-    name,
-    attendance,
-    guests || 0,
-    message || "-",
-    new Date().toISOString(),
-  ];
+  const now = new Date();
+  const options = { year: "numeric", month: "long", day: "numeric" };
+  const formattedDate = now.toLocaleDateString("sr-RS", options);
+
+  const row = [name, attendance, guests || 0, message || "-", formattedDate];
 
   try {
     // Upis u Google Sheet

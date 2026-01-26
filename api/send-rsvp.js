@@ -24,6 +24,11 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+transporter.verify((err, success) => {
+  if (err) console.error("Transporter error:", err);
+  else console.log("Mailer is ready");
+});
+
 /* ================= HANDLER ================= */
 export default async function handler(req, res) {
   if (req.method !== "POST") {

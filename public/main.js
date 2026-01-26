@@ -64,9 +64,14 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    let attendanceRaw = attendanceSelect.value.toLowerCase();
+    let attendance = "";
+    if (attendanceRaw.includes("da")) attendance = "da";
+    else if (attendanceRaw.includes("ne")) attendance = "ne";
+
     const data = {
       name: form.querySelector("input[type='text']").value,
-      attendance: attendanceSelect.value,
+      attendance,
       guests: guestsInput.value,
       message: form.querySelector("textarea").value,
       website: form.querySelector("input[name='website']")?.value || "",

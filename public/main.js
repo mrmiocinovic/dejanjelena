@@ -81,8 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
     submitBtn.textContent = "Šaljem... ⏳";
 
     try {
-      console.log("RSVP data:", data);
-
       const res = await fetch("/api/send-rsvp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

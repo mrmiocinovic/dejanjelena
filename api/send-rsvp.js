@@ -72,7 +72,6 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ success: true });
   } catch (err) {
-    console.error("RSVP ERROR:", err);
     return res
       .status(500)
       .json({ error: "Greška pri slanju mejla ili upisu u Sheet" });

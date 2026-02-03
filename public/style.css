@@ -309,7 +309,7 @@ footer {
   opacity: 1;
   pointer-events: none;
   transition: opacity 0.3s ease;
-  z-index: 10;
+  z-index: 1000;
 }
 
 .map-container:hover .gesture-overlay {
@@ -477,4 +477,10 @@ footer {
 button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+@media (max-width: 768px) {
+  .map-container:hover .gesture-overlay,
+  .gesture-overlay {
+    pointer-events: auto;
+  }
 }

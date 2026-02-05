@@ -1,19 +1,19 @@
 import nodemailer from "nodemailer";
 import { google } from "googleapis";
-
 import dotenv from "dotenv";
 
 if (process.env.VERCEL_ENV !== "production") {
   dotenv.config();
 }
 
+// Google Sheets setup
 const auth = new google.auth.GoogleAuth({
-  credentials: JSON.parse(process.env.GOOGLE_CREDENTIALS),
+  credentials: JSON.parse(process.env.GOOGLE_CREDENTIALS || "{}"),
   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
-
 const sheets = google.sheets({ version: "v4", auth });
 
+// Nodemailer setup
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -31,27 +31,41 @@ export default async function handler(req, res) {
 
   const { name, attendance, guests, message, website } = req.body;
 
+  // Honeypot check
   if (website) return res.status(200).json({ success: true });
 
-  if (!name || !attendance)
-    return res.status(400).json({ error: "Nedostaju obavezna polja" });
-
-  if (name.length < 2 || name.length > 50)
+  // VALIDATION
+  if (!name || name.trim().length < 2 || name.trim().length > 50) {
     return res.status(400).json({ error: "Neispravno ime" });
+  }
 
-  if (!["da", "ne"].includes(attendance))
+  const normalizedAttendance = attendance?.toLowerCase().trim();
+  if (!["da", "ne"].includes(normalizedAttendance)) {
     return res.status(400).json({ error: "Neispravan odgovor" });
+  }
 
-  if (guests && guests > 10)
+  const guestsNumber = guests ? Number(guests) : 0;
+  if (guestsNumber > 10) {
     return res.status(400).json({ error: "Previše gostiju" });
+  }
 
   const now = new Date();
-  const options = { year: "numeric", month: "long", day: "numeric" };
-  const formattedDate = now.toLocaleDateString("sr-RS", options);
+  const formattedDate = now.toLocaleDateString("sr-RS", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
-  const row = [name, attendance, guests || 0, message || "-", formattedDate];
+  const row = [
+    name.trim(),
+    normalizedAttendance,
+    guestsNumber,
+    message || "-",
+    formattedDate,
+  ];
 
   try {
+    // Append to Google Sheet
     await sheets.spreadsheets.values.append({
       spreadsheetId: process.env.SHEET_ID,
       range: "A:E",
@@ -59,22 +73,24 @@ export default async function handler(req, res) {
       requestBody: { values: [row] },
     });
 
+    // Send email
     await transporter.sendMail({
       from: `"Potvrda sa sajta – Dejan & Jelena" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER,
-      // cc: "mr.miocinovic@gmail.com",
+      cc: "mr.miocinovic@gmail.com", // 👈 tvoj CC
       subject: "Nova Potvrda 💍",
       html: `
         <h2>Nova Potvrda</h2>
-        <p><strong>Ime:</strong> ${name}</p>
-        <p><strong>Dolazi:</strong> ${attendance}</p>
-        <p><strong>Broj gostiju:</strong> ${guests || "-"}</p>
+        <p><strong>Ime:</strong> ${name.trim()}</p>
+        <p><strong>Dolazi:</strong> ${normalizedAttendance}</p>
+        <p><strong>Broj gostiju:</strong> ${guestsNumber || "-"}</p>
         <p><strong>Poruka:</strong> ${message || "-"}</p>
       `,
     });
 
     return res.status(200).json({ success: true });
   } catch (err) {
+    console.error("RSVP ERROR:", err);
     return res
       .status(500)
       .json({ error: "Greška pri slanju mejla ili upisu u Sheet" });

@@ -67,6 +67,13 @@ document.addEventListener("DOMContentLoaded", () => {
     let attendance = "";
     if (attendanceRaw.includes("da")) attendance = "da";
     else if (attendanceRaw.includes("ne")) attendance = "ne";
+    const guestsNumber = Number(guestsInput.value) || 0;
+
+    if (attendance.toLowerCase() === "da" && guestsNumber > 10) {
+      alert("Ne možete uneti više od 10 gostiju.");
+      guestsInput.focus();
+      return;
+    }
 
     const data = {
       name: document.getElementById("rsvp-name").value,
